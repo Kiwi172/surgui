@@ -1,0 +1,101 @@
+/* Design tokens for the silver-on-black desktop workbench.
+ * Queue states: active · queued · pausing · paused · failed · completed ·
+ * unknown. pendingApproval is an add outcome, not a queue state.
+ * Semantic status tokens (--color-error, --color-error-wash, --color-ok) are
+ * reinforcing signals only — always paired with a text label, glyph or
+ * outline, never colour alone.
+ * Dark-only by design: no prefers-color-scheme light override.
+ * Times New Roman (--font-ui) + system mono (--font-mono) are deliberate: the
+ * offline Tauri build loads no network/CDN fonts; see design.md.
+ */
+:root {
+  /* Paper — near-black family (#0b0b0b..#000), tuned off pure #000.
+     Elevation: higher surfaces are lighter, ~3% L per step. */
+  --color-paper: oklch(13% 0.004 265);
+  --color-paper-2: oklch(16.5% 0.004 265);
+  --color-paper-3: oklch(20% 0.005 265);
+
+  /* Rules — hairlines and interactive boundaries. --rule-2 clears 3:1 on paper. */
+  --color-rule: oklch(28% 0.006 265);
+  --color-rule-2: oklch(45% 0.007 265);
+
+  /* Text neutrals — silver family, lightest to mid. */
+  --color-neutral: oklch(60% 0.006 265);
+  --color-muted: oklch(72% 0.005 265);
+  --color-ink-2: oklch(85% 0.004 265);
+  --color-ink: oklch(95% 0.004 265);
+
+  /* Accent — grayscale highlighter: focus rings, active marks, link underline. */
+  --color-accent: oklch(88% 0.006 265);
+  --color-accent-ink: oklch(14% 0.004 265);
+  --color-accent-wash: oklch(24% 0.006 265);
+
+  /* Focus — max-contrast ring; perceptible in grayscale, never chroma-only. */
+  --color-focus: oklch(96% 0.004 265);
+
+  /* Semantic — always paired with a text label / glyph / outline, not colour alone. */
+  --color-error: oklch(74% 0.16 25);
+  --color-error-wash: oklch(24% 0.05 25);
+  --color-ok: oklch(78% 0.11 150);
+
+  /* Type — Times New Roman serif for copy/headings; system mono for telemetry. */
+  --font-ui: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* Spacing — 4pt base, named by role. */
+  --space-3xs: 0.125rem; /*   2px */
+  --space-2xs: 0.25rem; /*   4px */
+  --space-xs: 0.5rem; /*   8px */
+  --space-sm: 0.75rem; /*  12px */
+  --space-md: 1rem; /*  16px */
+  --space-lg: 1.5rem; /*  24px */
+  --space-xl: 2.5rem; /*  40px */
+  --space-2xl: 4rem; /*  64px */
+  --space-3xl: 6rem; /*  96px */
+  --space-4xl: 9rem; /* 144px */
+
+  /* Type scale — major third (1.25). */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5625rem;
+
+  /* Motion — motion-cut; opacity crossfades only. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  /* Z-index — six named levels. */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
+  --control-h: 2.75rem; /* 44px touch floor */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-pill: 999px;
+}
+
+/* Reduced motion is non-optional: transitions are switched off, not shortened.
+   A blanket transition-duration here would CREATE 150ms transitions on a UI
+   that ships none (default transition-property: all) — transition-property:
+   none prevents that. Progress widths snap; no animated widths. There are no
+   spinners or looping animations, so the clamps below are a safety net only. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-property: none !important;
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+}
